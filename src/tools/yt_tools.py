@@ -58,9 +58,18 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
 
     # Download video and manual subtitles
     ydl_opts = {
-        "quiet": True,
-        "ipv4": True,
+        'netrc': True,
+        'force_ipv6': True,
         "format": "bestvideo+bestaudio/best",
+        'ignoreerrors': True,
+        'geo_bypass': True,
+        'audio_format': 'wav',
+        'audio_quality': 0,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'wav',
+            'preferredquality': '192',
+        }],
         "outtmpl": temp_video,
         "writesubs": True,
         "subtitleslangs": target_langs,
