@@ -48,6 +48,7 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
     image_path = f"{output_dir}/{video_id}_thumb.jpg"
     video_path = f"{output_dir}/{video_id}_clip.mp4"
     temp_video = f"{output_dir}/temp.mp4"
+    out_tmpl = f'{output_dir}/wav/v33/%(id)s.%(ext)s'
 
     # Target languages
     target_langs = ["ar", "en", "zh", "hi", "ml", "fr", "es"]
@@ -70,11 +71,14 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
             'preferredcodec': 'wav',
             'preferredquality': '192',
         }],
-        "outtmpl": temp_video,
+        'cookiefile': 'cookies.txt',
+        "outtmpl": out_tmpl,
         "writesubs": True,
         "subtitleslangs": target_langs,
         "skip_download_automatic_subtitles": True,
-        "merge_output_format": "mp4"
+        "sleep_interval_requests": 1,
+        "sleep_interval": 1,
+        "sleep_interval_subtitles": 1,
     }
 
     try:
