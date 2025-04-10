@@ -46,6 +46,7 @@ def download_youtube(video_url: str, output_dir: str):
     target_langs = ["ar", "en", "zh", "hi", "ml", "fr", "es"]
 
     ydl_opts = {
+        'keepvideo': True,
         'geo_bypass': True,
         'source_address': '0.0.0.0',
         'download_archive': f'{output_dir}/ytd_dwl.log',
