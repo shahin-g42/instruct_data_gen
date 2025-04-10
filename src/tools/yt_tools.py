@@ -48,7 +48,6 @@ def download_youtube(video_url: str, output_dir: str):
     ydl_opts = {
         'geo_bypass': True,
         'source_address': '0.0.0.0',
-        'impersonate': 'Chrome',
         'download_archive': f'{output_dir}/ytd_dwl.log',
         "outtmpl": out_tmpl,
         'merge_output_format': 'mp4',
