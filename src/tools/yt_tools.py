@@ -79,6 +79,7 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
         "sleep_interval_requests": 1,
         "sleep_interval": 1,
         "sleep_interval_subtitles": 1,
+        'download_archive': f'{output_dir}/ytd_dwl.log',
     }
 
     try:
