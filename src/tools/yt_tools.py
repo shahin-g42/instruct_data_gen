@@ -45,7 +45,7 @@ def download_youtube(video_url: str, output_dir: str):
     out_tmpl = f'{output_dir}/wav/v33/%(id)s.%(ext)s'
 
     ydl_opts = {
-        'force_ipv4': True,
+        'source_address': '0.0.0.0',
         "outtmpl": out_tmpl,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
