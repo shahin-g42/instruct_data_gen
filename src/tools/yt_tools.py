@@ -47,8 +47,10 @@ def download_youtube(video_url: str, output_dir: str):
     ydl_opts = {
         'verbose': True,
         'geo_bypass': True,
+        'source_address': '0.0.0.0',
         'download_archive': f'{output_dir}/ytd_dwl.log',
         "outtmpl": out_tmpl,
+        'merge_output_format': 'mp4'
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(video_url, download=True)
