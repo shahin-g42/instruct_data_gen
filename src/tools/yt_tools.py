@@ -60,7 +60,7 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
     # Download video and manual subtitles
     ydl_opts = {
         'netrc': True,
-        'force_ipv6': True,
+        'force_ipv4': True,
         "format": "bestvideo+bestaudio/best",
         'ignoreerrors': True,
         'geo_bypass': True,
