@@ -46,6 +46,7 @@ def download_youtube(video_url: str, output_dir: str):
 
     ydl_opts = {
         'verbose': True,
+        'geo_bypass': True,
         'download_archive': f'{output_dir}/ytd_dwl.log',
         "outtmpl": out_tmpl,
     }
