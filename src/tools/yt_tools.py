@@ -67,7 +67,7 @@ def download_youtube(video_url: str, output_dir: str):
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(video_url, download=True)
-        logger.info(info)
+        # logger.info(info)
 
 
 def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
