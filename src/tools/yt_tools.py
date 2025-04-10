@@ -41,6 +41,18 @@ def search_youtube(query: str, lang: str = 'en', max_results: int = 30) -> list:
         return urls
 
 
+def download_youtube(video_url: str, output_dir: str):
+    out_tmpl = f'{output_dir}/wav/v33/%(id)s.%(ext)s'
+
+    ydl_opts = {
+        'force_ipv4': True,
+        "outtmpl": out_tmpl,
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(video_url, download=True)
+        logger.info(info)
+
+
 def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
     """Process a YouTube video: extract subtitles or transcribe, align audio/video chunks, save thumbnail."""
     video_id = video_url.split("v=")[1]
