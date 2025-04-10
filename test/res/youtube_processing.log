@@ -1,4 +1,0 @@
-2025-04-10 12:13:23.946 | INFO     | yt_tools:process_youtube:57 - Processing video: https://www.youtube.com/watch?v=cnMa-Sm9H4k (primary lang: en)
-2025-04-10 12:13:28.125 | ERROR    | yt_tools:process_youtube:76 - Download failed: ERROR: You have requested merging of multiple formats but ffmpeg is not installed. Aborting due to --abort-on-error
-2025-04-10 12:14:11.144 | INFO     | yt_tools:process_youtube:57 - Processing video: https://www.youtube.com/watch?v=cnMa-Sm9H4k (primary lang: en)
-2025-04-10 12:14:14.923 | ERROR    | yt_tools:process_youtube:76 - Download failed: ERROR: You have requested merging of multiple formats but ffmpeg is not installed. Aborting due to --abort-on-error
