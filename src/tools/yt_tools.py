@@ -73,11 +73,10 @@ def download_youtube(video_url: str, output_dir: str):
 def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
     """Process a YouTube video: extract subtitles or transcribe, align audio/video chunks, save thumbnail."""
     video_id = video_url.split("v=")[1]
-    audio_path = f"{output_dir}/{video_id}_audio.wav"
-    image_path = f"{output_dir}/{video_id}_thumb.jpg"
-    video_path = f"{output_dir}/{video_id}_clip.mp4"
-    temp_video = f"{output_dir}/temp.mp4"
-    out_tmpl = f'{output_dir}/wav/v33/%(id)s.%(ext)s'
+    audio_path = f"{output_dir}/media/v33/{video_id}.wav"
+    image_path = f"{output_dir}/media/v33/{video_id}_thumb.jpg"
+    video_path = f"{output_dir}/media/v33/{video_id}_clip.mp4"
+    out_tmpl = f'{output_dir}/media/v33/%(id)s.%(ext)s'
 
     # Target languages
     target_langs = ["ar", "en", "zh", "hi", "ml", "fr", "es"]
@@ -88,12 +87,13 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
 
     # Download video and manual subtitles
     ydl_opts = {
-        'netrc': True,
-        'force_ipv4': True,
-        'source_address': '0.0.0.0',
-        "format": "bestvideo+bestaudio/best",
-        'ignoreerrors': True,
+        'keepvideo': True,
         'geo_bypass': True,
+        'source_address': '0.0.0.0',
+        'download_archive': f'{output_dir}/ytd_dwl.log',
+        "outtmpl": out_tmpl,
+        'merge_output_format': 'mp4',
+        "format": "bestvideo+bestaudio/best",
         'audio_format': 'wav',
         'audio_quality': 0,
         'postprocessors': [{
@@ -101,15 +101,10 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
             'preferredcodec': 'wav',
             'preferredquality': '192',
         }],
-        'cookiefile': 'cookies.txt',
-        "outtmpl": out_tmpl,
         "writesubs": True,
         "subtitleslangs": target_langs,
         "skip_download_automatic_subtitles": True,
-        "sleep_interval_requests": 1,
         "sleep_interval": 1,
-        "sleep_interval_subtitles": 1,
-        'download_archive': f'{output_dir}/ytd_dwl.log',
     }
 
     try:
@@ -140,10 +135,10 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
         text = list(subtitles.values())[0]
         logger.info(f"Using first available subtitle: {list(subtitles.keys())[0]}")
     else:
-        logger.info("No manual subtitles, transcribing with Whisper Turbo")
+        logger.info("No manual subtitles, transcribing with Whisper...")
         try:
             model = stable_whisper.load_model('turbo')
-            result = model.transcribe(temp_video, language=lang)
+            result = model.transcribe(audio_path, language=lang)
             text = " ".join([seg.text for seg in result[:10]])
             logger.info(f"Transcription successful: {text[:50]}...")
         except Exception as e:
@@ -156,7 +151,7 @@ def process_youtube(video_url: str, output_dir: str, lang: str) -> dict:
     # Audio segmentation with torchaudio
     audio_duration = 10  # seconds
     try:
-        waveform, sample_rate = torchaudio.load(temp_video)
+        waveform, sample_rate = torchaudio.load(audio_path)
         segment_length = audio_duration * sample_rate
         waveform_segment = waveform[:, :segment_length]
         torchaudio.save(audio_path, waveform_segment, sample_rate)
