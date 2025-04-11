@@ -43,7 +43,7 @@ def search_youtube(query: str, lang: str = 'en', max_results: int = 30) -> list:
 
 def download_youtube(video_url: str, output_dir: str):
     out_tmpl = f'{output_dir}/media/v33/%(id)s.%(ext)s'
-    target_langs = ["ar", "en", "zh", "hi", "ml", "fr", "es"]
+    # target_langs = ["ar", "en", "zh", "hi", "ml", "fr", "es"]
 
     ydl_opts = {
         'keepvideo': True,
@@ -61,7 +61,7 @@ def download_youtube(video_url: str, output_dir: str):
             'preferredquality': '192',
         }],
         "writesubs": True,
-        "subtitleslangs": target_langs,
+        # "subtitleslangs": target_langs,
         "skip_download_automatic_subtitles": True,
         "sleep_interval": 1,
     }
