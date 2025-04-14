@@ -365,13 +365,15 @@ class YtProcessor:
         """
         # Template for output filenames
         out_tmpl = f'{self.output_dir}/media/{self.version}/%(id)s.%(ext)s'
+        _log_dir = os.path.join(log_dir, f"yt_dlp/{self.version}")
+        os.makedirs(_log_dir, exist_ok=True)
 
         # yt_dlp configuration options
         return {
             'keepvideo': True,  # Do not delete the video file after extracting audio
             'geo_bypass': True,  # Bypass geographic restrictions
             'source_address': '0.0.0.0',  # Bind to this IP address
-            'download_archive': f'{self.output_dir}/{self.version}/ytd_dwl.log',  # Log to track downloaded videos
+            'download_archive': f'{_log_dir}/ytd_dwl.log',  # Log to track downloaded videos
             "outtmpl": out_tmpl,  # Filename template for output files
             'merge_output_format': 'mp4',  # Output format for merged files
             "format": "bestvideo+bestaudio/best",  # Best quality video and audio
