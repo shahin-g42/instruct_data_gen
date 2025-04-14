@@ -422,6 +422,7 @@ class YtProcessor:
         query = f"ytsearch{max_results}:{query}"
         urls = []
         try:
+            logger.info(f"Search for videos, query: {query}, lang: {lang}, max_results: {max_results}")
             # Use yt_dlp to extract the video URLs from the search results
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 result = ydl.extract_info(query, download=False)
