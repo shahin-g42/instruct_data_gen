@@ -337,7 +337,12 @@ class _YtPostProcessor:
         fps = info["video_fps"]
 
         # Write the segmented video to the output file
-        torchvision.io.write_video(output_filepath, video, fps, video_codec="h264")
+        # - h264_nvenc
+        # - hevc_nvenc
+        # - nvenc
+        # - nvenc_h264
+        # - nvenc_hevc
+        torchvision.io.write_video(output_filepath, video, fps, video_codec="nvenc_h264")
 
 
 class YtProcessor:
@@ -497,7 +502,8 @@ class YtProcessor:
             logger.info("No manual subtitles found, generating VTT with stable-whisper")
             try:
                 language, trans_vtt_file = self.yt_post_processor.transcribe(audio_path=audio_fp)
-                segments = self.yt_post_processor.segment_from_vtt(vtt_filepath=trans_vtt_file,
+                segments = self.yt_post_processor.segment_from_vtt(video_id=video_id,
+                                                                   vtt_filepath=trans_vtt_file,
                                                                    audio_filepath=audio_fp,
                                                                    video_filepath=video_fp,
                                                                    lang=language)
