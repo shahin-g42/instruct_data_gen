@@ -337,7 +337,7 @@ class _YtPostProcessor:
         fps = info["video_fps"]
 
         # Write the segmented video to the output file
-        torchvision.io.write_video(output_filepath, video, fps, video_codec="nvenc_h264")
+        torchvision.io.write_video(output_filepath, video, fps, video_codec="h264")
 
 
 class YtProcessor:
