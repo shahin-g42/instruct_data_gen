@@ -509,13 +509,20 @@ class YtProcessor:
 
         logger.info(f"Processed {len(segments_dict)} language segments, languages: {segments_dict.keys()}.")
 
+        # Get description
+        with open(desc_fp, "r", encoding="utf-8") as f:
+            description = f.read()
+            f.flush()
+            f.close()
+            logger.debug(f"Description {description}.")
+
         return _DataElement(
             id=str(uuid.uuid4()),
             video_url=video_url,
             video_id=video_id,
             thumbnail=image_fp,
             title=title,
-            description=desc_fp,
+            description=description,
             video_path=video_fp,
             audio_path=audio_fp,
             subtitle_paths=subtitle_files,
