@@ -1,3 +1,3 @@
-from src.tools.yt_tools import search_youtube, process_youtube, download_youtube
+from src.tools.yt_tools import YtProcessor
 
-__all__ = ["search_youtube", "process_youtube", "download_youtube"]
+__all__ = ["YtProcessor"]

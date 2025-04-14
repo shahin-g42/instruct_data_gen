@@ -1,9 +1,9 @@
-from src.tools import search_youtube, process_youtube, download_youtube
+from src.tools import YtProcessor
 
-# urls = search_youtube("charlie chaplin", max_results=15)
+ytp = YtProcessor(output_dir="res_test")
 
-# for url in urls:
-#     res = download_youtube(url, "res")
+urls = ytp.search_youtube("dublin", max_results=15)
 
-url = "https://www.youtube.com/watch?v=apbSsILLh28"
-res = download_youtube(url, "res")
+for url in urls:
+    res = ytp.process_youtube(url)
+    print(res)
