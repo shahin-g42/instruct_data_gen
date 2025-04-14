@@ -398,7 +398,7 @@ class YtProcessor:
             "writedescription": True,  # Download video description
             "writeinfojson": True,  # Download video metadata in JSON format
             "clean_infojson": True,  # Clean up the JSON metadata
-            "getcomments": True,  # Download video comments
+            "getcomments": False,  # Download video comments
             "sleep_interval": 1,  # Sleep interval between downloads
             "sleep_interval_requests": 2,
             "sleep_interval_subtitles": 2,
