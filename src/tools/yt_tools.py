@@ -298,7 +298,7 @@ class _YtPostProcessor:
                 logger.info(f"Segmented video: {video_segment_path} ({start_sec}-{end_sec}s)")
             except Exception as e:
                 logger.error(f"Video segmentation failed for segment {idx}: {e}")
-                continue
+                raise e
 
             # Append segment details to the list
             segments.append({
