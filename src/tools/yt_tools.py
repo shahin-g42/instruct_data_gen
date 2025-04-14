@@ -428,10 +428,11 @@ class YtProcessor:
                 result = ydl.extract_info(query, download=False)
                 if "entries" in result and result["entries"]:
                     urls = [f"https://www.youtube.com/watch?v={entry['id']}" for entry in result["entries"]]
-            return urls
         except Exception as e:
             logger.info(f"Error in search_youtube: {e}")
-            return urls
+
+        logger.info(f"Found {len(urls)} videos")
+        return urls
 
     def process_youtube(self, video_url: str) -> _DataElement:
 
