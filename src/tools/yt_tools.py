@@ -378,7 +378,7 @@ class YtProcessor:
         return {
             'keepvideo': True,  # Do not delete the video file after extracting audio
             'geo_bypass': True,  # Bypass geographic restrictions
-            # 'source_address': '192.168.1.71',  # Bind to this IP address
+            # 'source_address': '0.0.0.0',  # Bind to this IP address
             'cookiefile': 'cookies.txt',
             'download_archive': f'{_log_dir}/ytd_dwl.log',  # Log to track downloaded videos
             "outtmpl": out_tmpl,  # Filename template for output files
