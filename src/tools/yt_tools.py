@@ -245,18 +245,23 @@ class _YtPostProcessor:
         result.to_srt_vtt(trans_vtt_file, vtt=True, word_level=False)
         return language, trans_vtt_file
 
-    def segment_from_vtt(self, vtt_filepath: str, audio_filepath: str, video_filepath: str, lang: str) -> list:
+    def segment_from_vtt(self, video_id: str,
+                         vtt_filepath: str,
+                         audio_filepath: str,
+                         video_filepath: str,
+                         lang: str) -> list:
         """
         Segment audio and video based on timestamps in a .vtt file.
 
         Args:
+            video_id (str): Identifier for the video being processed.
             vtt_filepath (str): Path to the .vtt subtitle file.
             audio_filepath (str): Path to the source audio file.
             video_filepath (str): Path to the source video file.
             lang (str): Language of the transcription.
 
         Returns:
-            list: List of segment dicts with text, audio_path, and video_path.
+            list: List of segment dicts with index, text, audio_path, video_path, and lang.
         """
         segments = []
 
@@ -276,8 +281,8 @@ class _YtPostProcessor:
             text = caption.text
 
             # Generate indexed output paths for the audio and video segments
-            audio_segment_path = f"{audio_filepath}_audio_{idx}.wav"
-            video_segment_path = f"{audio_filepath}_clip_{idx}.mp4"
+            audio_segment_path = f"{video_id}_audio_{idx}.wav"
+            video_segment_path = f"{video_id}_clip_{idx}.mp4"
 
             # Segment the audio
             try:
@@ -295,6 +300,7 @@ class _YtPostProcessor:
                 logger.error(f"Video segmentation failed for segment {idx}: {e}")
                 continue
 
+            # Append segment details to the list
             segments.append({
                 "index": idx,
                 "text": text,
@@ -470,10 +476,14 @@ class YtProcessor:
             sub_file = subtitle_fp_template.format(sub_lang)
             if os.path.exists(sub_file):
                 any_subtitles = True
-                segments = self.yt_post_processor.segment_from_vtt(vtt_filepath=sub_file,
-                                                                   audio_filepath=audio_fp,
-                                                                   video_filepath=video_fp,
-                                                                   lang=sub_lang)
+                segments = self.yt_post_processor.segment_from_vtt(
+                    video_id=video_id,
+                    vtt_filepath=sub_file,
+                    audio_filepath=audio_fp,
+                    video_filepath=video_fp,
+                    lang=sub_lang
+                )
+
                 segments_dict[sub_lang] = segments
                 subtitle_files.append(sub_file)
 
