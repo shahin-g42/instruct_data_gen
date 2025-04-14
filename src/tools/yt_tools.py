@@ -365,7 +365,7 @@ class YtProcessor:
         """
         # Template for output filenames
         out_tmpl = f'{self.output_dir}/media/{self.version}/%(id)s.%(ext)s'
-        _log_dir = os.path.join(log_dir, f"yt_dlp/{self.version}")
+        _log_dir = os.path.join(self.output_dir, f"yt_dlp/log/{self.version}")
         os.makedirs(_log_dir, exist_ok=True)
 
         # yt_dlp configuration options
