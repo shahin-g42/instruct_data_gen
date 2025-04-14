@@ -399,6 +399,8 @@ class YtProcessor:
             "clean_infojson": True,  # Clean up the JSON metadata
             "getcomments": True,  # Download video comments
             "sleep_interval": 1,  # Sleep interval between downloads
+            "sleep_interval_requests": 2,
+            "sleep_interval_subtitles": 2,
         }
 
     @staticmethod
