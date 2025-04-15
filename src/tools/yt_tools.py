@@ -331,18 +331,24 @@ class _YtPostProcessor:
             end_sec (float): End time in seconds for the segment.
         """
         # Read the video segment from the input file
-        video, _, info = torchvision.io.read_video(input_filepath, start_pts=start_sec, end_pts=end_sec, pts_unit="sec")
+        video, audio, info = torchvision.io.read_video(input_filepath,
+                                                       start_pts=start_sec,
+                                                       end_pts=end_sec,
+                                                       pts_unit="sec")
 
         # Extract frames per second (fps) from video info
-        fps = info["video_fps"]
+        vid_fps = info["video_fps"]
+        aud_sr = info["audio_fps"]
 
         # Write the segmented video to the output file
-        # - h264_nvenc
-        # - hevc_nvenc
-        # - nvenc
-        # - nvenc_h264
-        # - nvenc_hevc
-        torchvision.io.write_video(output_filepath, video, fps, video_codec="nvenc_h264")
+        torchvision.io.write_video(filename=output_filepath,
+                                   video_array=video,
+                                   fps=vid_fps,
+                                   video_codec="h264",
+                                   audio_array=audio,
+                                   audio_fps=aud_sr,
+                                   audio_codec="aac")
+        # torchvision.io.write_video(output_filepath, video, fps, video_codec="h264")
 
 
 class YtProcessor:
