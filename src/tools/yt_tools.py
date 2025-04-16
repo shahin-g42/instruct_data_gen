@@ -212,6 +212,7 @@ import webvtt
 import yt_dlp
 from loguru import logger
 from pydantic import BaseModel
+from torchcodec.decoders import VideoDecoder
 
 # Configure logging
 log_dir = os.path.join(os.getcwd(), "logs")
@@ -418,10 +419,14 @@ class YtProcessor:
     @staticmethod
     def __search_options(lang: str = "ar"):
         return {
-            "quiet": True,
+            'geo_bypass': True,
+            'cookiefile': 'cookies.txt',
             "no_warnings": True,
             "extract_flat": False,
             "language": lang,
+            "sleep_interval": 1,  # Sleep interval between downloads
+            "sleep_interval_requests": 2,
+            "sleep_interval_subtitles": 2,
         }
 
     def search_youtube(self, query: str, lang: str = 'en', max_results: int = 30) -> list:
