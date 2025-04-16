@@ -431,6 +431,7 @@ class YtProcessor:
     def __search_options(lang: str = "ar"):
         return {
             'geo_bypass': True,
+            'verbose': True,
             'extractor_args': {'youtube': {'getpot_bgutil_baseurl': 'http://inception-hpc-login-002:4416'}},
             "no_warnings": True,
             "extract_flat": False,
