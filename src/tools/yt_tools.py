@@ -401,7 +401,8 @@ class YtProcessor:
             'keepvideo': True,  # Do not delete the video file after extracting audio
             'geo_bypass': True,  # Bypass geographic restrictions
             # 'source_address': '0.0.0.0',  # Bind to this IP address
-            'cookiefile': 'cookies.txt',
+            # 'cookiefile': 'cookies.txt',
+            'extractor_args': {'youtube': {'getpot_bgutil_baseurl': 'http://inception-hpc-login-002:4416'}},
             'download_archive': f'{_log_dir}/ytd_dwl.log',  # Log to track downloaded videos
             "outtmpl": out_tmpl,  # Filename template for output files
             'merge_output_format': 'mp4',  # Output format for merged files
@@ -430,8 +431,7 @@ class YtProcessor:
     def __search_options(lang: str = "ar"):
         return {
             'geo_bypass': True,
-            # 'source_address': '0.0.0.0',  # Bind to this IP address
-            'cookiefile': 'cookies.txt',
+            'extractor_args': {'youtube': {'getpot_bgutil_baseurl': 'http://inception-hpc-login-002:4416'}},
             "no_warnings": True,
             "extract_flat": False,
             "language": lang,
