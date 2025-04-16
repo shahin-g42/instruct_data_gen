@@ -430,6 +430,7 @@ class YtProcessor:
     def __search_options(lang: str = "ar"):
         return {
             'geo_bypass': True,
+            'source_address': '0.0.0.0',  # Bind to this IP address
             'cookiefile': 'cookies.txt',
             "no_warnings": True,
             "extract_flat": False,
