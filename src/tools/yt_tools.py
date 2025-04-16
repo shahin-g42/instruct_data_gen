@@ -390,7 +390,7 @@ class YtProcessor:
         return {
             'keepvideo': True,  # Do not delete the video file after extracting audio
             'geo_bypass': True,  # Bypass geographic restrictions
-            # 'source_address': '0.0.0.0',  # Bind to this IP address
+            'source_address': '0.0.0.0',  # Bind to this IP address
             'cookiefile': 'cookies.txt',
             'download_archive': f'{_log_dir}/ytd_dwl.log',  # Log to track downloaded videos
             "outtmpl": out_tmpl,  # Filename template for output files
@@ -412,8 +412,8 @@ class YtProcessor:
             "clean_infojson": True,  # Clean up the JSON metadata
             "getcomments": False,  # Download video comments
             "sleep_interval": 1,  # Sleep interval between downloads
-            "sleep_interval_requests": 2,
-            "sleep_interval_subtitles": 2,
+            "sleep_interval_requests": 1,
+            "sleep_interval_subtitles": 1,
         }
 
     @staticmethod
@@ -425,8 +425,8 @@ class YtProcessor:
             "extract_flat": False,
             "language": lang,
             "sleep_interval": 1,  # Sleep interval between downloads
-            "sleep_interval_requests": 2,
-            "sleep_interval_subtitles": 2,
+            "sleep_interval_requests": 1,
+            "sleep_interval_subtitles": 1,
         }
 
     def search_youtube(self, query: str, lang: str = 'en', max_results: int = 30) -> list:
