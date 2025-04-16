@@ -202,7 +202,7 @@
 
 import os
 import uuid
-from typing import List
+from typing import List, Optional
 
 import stable_whisper
 import torch
@@ -212,7 +212,6 @@ import webvtt
 import yt_dlp
 from loguru import logger
 from pydantic import BaseModel
-from torchcodec.decoders import VideoDecoder
 
 # Configure logging
 log_dir = os.path.join(os.getcwd(), "logs")
@@ -332,23 +331,34 @@ class _YtPostProcessor:
             end_sec (float): End time in seconds for the segment.
         """
         # Read the video segment from the input file
-        video, audio, info = torchvision.io.read_video(input_filepath,
-                                                       start_pts=start_sec,
-                                                       end_pts=end_sec,
-                                                       pts_unit="sec")
+        video_frames, audio_frames, info = torchvision.io.read_video(input_filepath,
+                                                                     start_pts=start_sec,
+                                                                     end_pts=end_sec,
+                                                                     pts_unit="sec",
+                                                                     output_format="TCHW")
 
-        # Extract frames per second (fps) from video info
-        vid_fps = info["video_fps"]
-        aud_sr = info["audio_fps"]
+        # Extract fps and sr
+        fps = float(info["video_fps"])
+        v_height = int(video_frames.shape[2])
+        v_width = int(video_frames.shape[3])
+        sr = int(info["audio_fps"])
+        a_channels = int(audio_frames.shape[0])
 
         # Write the segmented video to the output file
-        torchvision.io.write_video(filename=output_filepath,
-                                   video_array=video,
-                                   fps=vid_fps,
-                                   video_codec="h264",
-                                   audio_array=audio,
-                                   audio_fps=aud_sr,
-                                   audio_codec="aac")
+        s = torchaudio.io.StreamWriter(output_filepath)
+        s.add_video_stream(frame_rate=fps, height=v_height, width=v_width)
+        s.add_audio_stream(sample_rate=sr, num_channels=a_channels)
+
+        with s.open():
+            s.write_audio_chunk(0, audio_frames)
+            s.write_video_chunk(1, video_frames)
+        # torchvision.io.write_video(filename=output_filepath,
+        #                            video_array=video,
+        #                            fps=vid_fps,
+        #                            video_codec="h264",
+        #                            audio_array=audio,
+        #                            audio_fps=aud_sr,
+        #                            audio_codec="aac")
         # torchvision.io.write_video(output_filepath, video, fps, video_codec="h264")
 
 
@@ -459,7 +469,7 @@ class YtProcessor:
         logger.info(f"Found {len(urls)} videos")
         return urls
 
-    def process_youtube(self, video_url: str) -> _DataElement:
+    def process_youtube(self, video_url: str) -> Optional[_DataElement]:
 
         video_id = self.__video_id(video_url)
         media_path = f"{self.output_dir}/media/{self.version}/{video_id}"
@@ -474,16 +484,16 @@ class YtProcessor:
 
         # Download video and manual subtitles
         ydl_opts = self.__download_options()
-        title = "Untitled"
 
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(video_url, download=True)
-                title = info.get("title", "Untitled")
-                logger.info(f"Downloaded video: {title}")
-        except Exception as e:
-            logger.error(f"Download failed: {e}")
-            return []
+        if not os.path.exists(video_fp):
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(video_url, download=True)
+                    title = info.get("title", "Untitled")
+                    logger.info(f"Downloaded video: {title}")
+            except Exception as e:
+                logger.error(f"Download failed: {e}")
+                return None
 
         # Collect subtitles and segments
         segments_dict = {}
